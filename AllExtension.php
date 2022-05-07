@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Twig;
+namespace App\Twig\base;
 
-use App\Service\ToolsHelper;
+use App\Service\base\ToolsHelper;
 use DOMDocument;
 use Faker\Factory;
 use Symfony\Component\Config\Definition\Exception\Exception;
