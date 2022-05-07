@@ -6,7 +6,7 @@
 ## implementation de functions php
 
 | twig function | description |
-| _________ | _______ |
+| ------- | --------- |
 | TBdd | return die and dump of symfony |
 | TBgetenv |  return variable from $\_ENV |
 
