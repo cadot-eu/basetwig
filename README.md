@@ -5,10 +5,10 @@
 
 ## implementation de functions php
 
-| twig function | description |
-| ------- | --------- |
-| TBdd | return die and dump of symfony |
-| TBgetenv |  return variable from $\_ENV |
+| twig function | description                    |
+| ------------- | ------------------------------ |
+| TBdd          | return die and dump of symfony |
+| TBgetenv      | return variable from $\_ENV    |
 
 ## functions d'affichage
 
@@ -27,3 +27,4 @@
 | TBtxtfromhtml     | decoded and cleaned                               |
 | TBJsonPretty      | return a pretty string from json                  |
 | TBuploadmax       | return the lowest file upload from php and server |
+| TBlang('fr')      | Return lang of text marked by ckeditor            |
