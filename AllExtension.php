@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Service\base\StringHelper;
 
 class AllExtension extends AbstractExtension
 {
@@ -71,11 +72,13 @@ class AllExtension extends AbstractExtension
             new TwigFilter('TBsanitize', [$this, 'sanitize']),
             new TwigFilter('TBobjetProperties', [$this, 'objetProperties']),
             new TwigFilter('TBtxtfromhtml', [$this, 'txtfromhtml']),
+            new TwigFilter('TBlang', [$this, 'lang']),
             new TwigFilter('TBjsonpretty', [
                 $this, 'jsonpretty', [
                     'is_safe' => ['html'],
 
                 ],
+
             ]),
             /* -------------------------------- ckeditor -------------------------------- */
             new TwigFilter('TBckclean', [
@@ -190,6 +193,10 @@ class AllExtension extends AbstractExtension
         }
 
         return implode('<br>', $tr);
+    }
+    public function lang($string, $lang)
+    {
+        return StringHelper::chaine_extract($string, '<span lang="' . $lang . '" dir="ltr">', '</span>');
     }
 
     //convertie une date anglaise en fr
