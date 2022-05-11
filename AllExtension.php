@@ -11,9 +11,18 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Service\base\StringHelper;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AllExtension extends AbstractExtension
 {
+    private $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
     public function getFunctions(): array
     {
         return [
@@ -194,9 +203,24 @@ class AllExtension extends AbstractExtension
 
         return implode('<br>', $tr);
     }
-    public function lang($string, $lang)
+    /**
+     * It takes a string of HTML, finds all the `<span>` tags with a `lang` attribute, and removes them
+     * if the `lang` attribute doesn't match the current locale
+     * 
+     * @param html the html to be filtered
+     * @param lang The name of the filter.
+     * 
+     * @return The HTML of the page with the span tags removed.
+     */
+    public function lang($html, $lang = '')
     {
-        return StringHelper::chaine_extract($string, '<span lang="' . $lang . '" dir="ltr">', '</span>');
+        $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
+        $crawler = new Crawler($html);
+        foreach ($crawler->filter('span[lang]') as $node) {
+            if ($node->getAttribute('lang') != $locale)
+                $node->parentNode->removeChild($node);
+        };
+        return $crawler->outerHtml();
     }
 
     //convertie une date anglaise en fr
