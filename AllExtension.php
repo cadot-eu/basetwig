@@ -2,6 +2,7 @@
 
 namespace App\Twig\base;
 
+use App\Service\base\HtmlHelper;
 use App\Service\base\ToolsHelper;
 use DOMDocument;
 use Faker\Factory;
@@ -220,7 +221,7 @@ class AllExtension extends AbstractExtension
             if ($node->getAttribute('lang') != $locale)
                 $node->parentNode->removeChild($node);
         };
-        return $crawler->outerHtml();
+        return HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html', 'p']);
     }
 
     //convertie une date anglaise en fr
@@ -426,6 +427,11 @@ class AllExtension extends AbstractExtension
 
             return html_entity_decode(strip_tags($string) . $pad);
         }
+    }
+
+    static function ckclean($string)
+    {
+        dd($string);
     }
 
     /* -------------------------------------------------------------------------- */
