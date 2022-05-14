@@ -221,7 +221,7 @@ class AllExtension extends AbstractExtension
             if ($node->getAttribute('lang') != $locale)
                 $node->parentNode->removeChild($node);
         };
-        return HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html', 'p']);
+        return HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
     }
 
     //convertie une date anglaise en fr
