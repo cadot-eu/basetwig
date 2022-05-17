@@ -217,18 +217,10 @@ class AllExtension extends AbstractExtension
     {
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
         $crawler = new Crawler($html);
-<<<<<<< HEAD
         foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
             $node->parentNode->removeChild($node);
         };
         return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
-=======
-        foreach ($crawler->filter('span[lang]') as $node) {
-            if ($node->getAttribute('lang') != $locale)
-                $node->parentNode->removeChild($node);
-        };
-        return HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
->>>>>>> 53da8924c8f6828506ef72895dfc5c6a8648133f
     }
 
     //convertie une date anglaise en fr
