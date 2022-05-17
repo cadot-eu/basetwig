@@ -99,6 +99,13 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+            new TwigFunction('TBckintro', [
+                $this, 'ckintro', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
+
         ];
     }
 
