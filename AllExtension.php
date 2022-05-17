@@ -2,6 +2,7 @@
 
 namespace App\Twig\base;
 
+use App\Service\base\HtmlHelper;
 use App\Service\base\ToolsHelper;
 use DOMDocument;
 use Faker\Factory;
@@ -10,9 +11,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use App\Service\base\StringHelper;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AllExtension extends AbstractExtension
 {
+    private $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
     public function getFunctions(): array
     {
         return [
@@ -71,11 +82,13 @@ class AllExtension extends AbstractExtension
             new TwigFilter('TBsanitize', [$this, 'sanitize']),
             new TwigFilter('TBobjetProperties', [$this, 'objetProperties']),
             new TwigFilter('TBtxtfromhtml', [$this, 'txtfromhtml']),
+            new TwigFilter('TBlang', [$this, 'lang']),
             new TwigFilter('TBjsonpretty', [
                 $this, 'jsonpretty', [
                     'is_safe' => ['html'],
 
                 ],
+
             ]),
             /* -------------------------------- ckeditor -------------------------------- */
             new TwigFilter('TBckclean', [
@@ -190,6 +203,24 @@ class AllExtension extends AbstractExtension
         }
 
         return implode('<br>', $tr);
+    }
+    /**
+     * It takes a string of HTML, finds all the `<span>` tags with a `lang` attribute, and removes them
+     * if the `lang` attribute doesn't match the current locale
+     * 
+     * @param html the html to be filtered
+     * @param lang The name of the filter.
+     * 
+     * @return The HTML of the page with the span tags removed.
+     */
+    public function lang($html, $lang = '')
+    {
+        $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
+        $crawler = new Crawler($html);
+        foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
+            $node->parentNode->removeChild($node);
+        };
+        return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
     }
 
     //convertie une date anglaise en fr
@@ -397,6 +428,11 @@ class AllExtension extends AbstractExtension
         }
     }
 
+    static function ckclean($string)
+    {
+        dd($string);
+    }
+
     /* -------------------------------------------------------------------------- */
     /*                            functions editeur ejs                           */
     /* -------------------------------------------------------------------------- */
@@ -560,5 +596,37 @@ class AllExtension extends AbstractExtension
         } else {
             return 'bi bi-' . $list[array_rand($list)];
         }
+    }
+
+    function innerHTML(\DOMNode $n, $include_target_tag = true)
+    {
+        $doc = new \DOMDocument();
+        $doc->appendChild($doc->importNode($n, true));
+        $html = trim($doc->saveHTML());
+        if ($include_target_tag) {
+            return $html;
+        }
+        return preg_replace('@^<' . $n->nodeName . '[^>]*>|</' . $n->nodeName . '>$@', '', $html);
+    }
+    function changeTagName($node, $name)
+    {
+        $childnodes = array();
+        foreach ($node->childNodes as $child) {
+            $childnodes[] = $child;
+        }
+        $newnode = $node->ownerDocument->createElement($name);
+        foreach ($childnodes as $child) {
+            $child2 = $node->ownerDocument->importNode($child, true);
+            $newnode->appendChild($child2);
+        }
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                $attrName = $attr->nodeName;
+                $attrValue = $attr->nodeValue;
+                $newnode->setAttribute($attrName, $attrValue);
+            }
+        }
+        $node->parentNode->replaceChild($newnode, $node);
+        return $newnode;
     }
 }

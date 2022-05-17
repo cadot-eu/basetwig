@@ -5,25 +5,26 @@
 
 ## implementation de functions php
 
-| twig function | description |
-| ------- | --------- |
-| TBdd | return die and dump of symfony |
-| TBgetenv |  return variable from $\_ENV |
+| twig function | description                    |
+| ------------- | ------------------------------ |
+| TBdd          | return die and dump of symfony |
+| TBgetenv      | return variable from $\_ENV    |
 
 ## functions d'affichage
 
-| twig function     | description                                       |
-| ----------------- | ------------------------------------------------- |
-| TBdatefr          | return a date in french format                    |
-| TBgetPublic       | clean for return public file path                 |
-| TBgetFilename     | return filename                                   |
-| TBimgToBase64     | return a immage code in base64, inline option     |
-| TBjsondecode      | json decode                                       |
-| TBfaker           | make french faker                                 |
-| TBfakeren         | make english faker                                |
-| TBfakericon       | faker of bootstrap icons                          |
-| TBsanitize        | string clean, without space, character...         |
-| TBobjetProperties | array of properties object                        |
-| TBtxtfromhtml     | decoded and cleaned                               |
-| TBJsonPretty      | return a pretty string from json                  |
-| TBuploadmax       | return the lowest file upload from php and server |
+| twig function          | description                                              |
+| ---------------------- | -------------------------------------------------------- |
+| TBdatefr               | return a date in french format                           |
+| TBgetPublic            | clean for return public file path                        |
+| TBgetFilename          | return filename                                          |
+| TBimgToBase64          | return a immage code in base64, inline option            |
+| TBjsondecode           | json decode                                              |
+| TBfaker                | make french faker                                        |
+| TBfakeren              | make english faker                                       |
+| TBfakericon            | faker of bootstrap icons                                 |
+| TBsanitize             | string clean, without space, character...                |
+| TBobjetProperties      | array of properties object                               |
+| TBtxtfromhtml          | decoded and cleaned                                      |
+| TBJsonPretty           | return a pretty string from json                         |
+| TBuploadmax            | return the lowest file upload from php and server        |
+| TBlang('fr') ou TBlang | Return lang of text marked by ckeditor by lang or locale |
