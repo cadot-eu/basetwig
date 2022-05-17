@@ -217,11 +217,10 @@ class AllExtension extends AbstractExtension
     {
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
         $crawler = new Crawler($html);
-        foreach ($crawler->filter('span[lang]') as $node) {
-            if ($node->getAttribute('lang') != $locale)
-                $node->parentNode->removeChild($node);
+        foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
+            $node->parentNode->removeChild($node);
         };
-        return HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
+        return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
     }
 
     //convertie une date anglaise en fr
@@ -597,5 +596,37 @@ class AllExtension extends AbstractExtension
         } else {
             return 'bi bi-' . $list[array_rand($list)];
         }
+    }
+
+    function innerHTML(\DOMNode $n, $include_target_tag = true)
+    {
+        $doc = new \DOMDocument();
+        $doc->appendChild($doc->importNode($n, true));
+        $html = trim($doc->saveHTML());
+        if ($include_target_tag) {
+            return $html;
+        }
+        return preg_replace('@^<' . $n->nodeName . '[^>]*>|</' . $n->nodeName . '>$@', '', $html);
+    }
+    function changeTagName($node, $name)
+    {
+        $childnodes = array();
+        foreach ($node->childNodes as $child) {
+            $childnodes[] = $child;
+        }
+        $newnode = $node->ownerDocument->createElement($name);
+        foreach ($childnodes as $child) {
+            $child2 = $node->ownerDocument->importNode($child, true);
+            $newnode->appendChild($child2);
+        }
+        if ($node->hasAttributes()) {
+            foreach ($node->attributes as $attr) {
+                $attrName = $attr->nodeName;
+                $attrValue = $attr->nodeValue;
+                $newnode->setAttribute($attrName, $attrValue);
+            }
+        }
+        $node->parentNode->replaceChild($newnode, $node);
+        return $newnode;
     }
 }
