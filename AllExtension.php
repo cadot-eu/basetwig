@@ -72,6 +72,13 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+            new TwigFunction('TBckintro', [
+                $this, 'ckintro', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
+
 
         ];
     }
@@ -96,12 +103,6 @@ class AllExtension extends AbstractExtension
                     'is_safe' => [
                         'html',
                     ],
-
-                ],
-            ]),
-            new TwigFunction('TBckintro', [
-                $this, 'ckintro', [
-                    'is_safe' => ['html'],
 
                 ],
             ]),
