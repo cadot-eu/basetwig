@@ -438,7 +438,7 @@ class AllExtension extends AbstractExtension
 
     static function ckclean($string)
     {
-        dd($string);
+        return preg_replace("/<\\/?p(\\s+.*?>|>)/", "", $string);;
     }
 
     /* -------------------------------------------------------------------------- */
