@@ -223,6 +223,7 @@ class AllExtension extends AbstractExtension
      */
     public function lang($html, $lang = '')
     {
+        if (!$html) return null;
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
         $crawler = new Crawler($html);
         foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
