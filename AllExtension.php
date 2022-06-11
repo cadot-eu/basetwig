@@ -78,6 +78,19 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+            new TwigFunction('TBshema', [
+                $this, 'shema', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
+            new TwigFunction('TBkeywords', [
+                $this, 'keywords', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
+
 
 
         ];
@@ -637,5 +650,41 @@ class AllExtension extends AbstractExtension
         }
         $node->parentNode->replaceChild($newnode, $node);
         return $newnode;
+    }
+    /**
+     * It takes a type and a json object as parameters, and returns a string containing the schema.org
+     * markup
+     * ajouter no_ pour ne pas afficher un élément
+     * permet d'envoyer text pour extraire les keywords sans le retourner
+     * 
+     * @param type the type of schema you want to use.
+     * @param json the json object to be converted to a schema.org object
+     * 
+     * @return the value of the variable .
+     */
+
+    function shema($type, $json)
+    {
+        $res['@context'] = "http://schema.org";
+        $res['@type'] = ucfirst($json['@type']);
+        switch (strtolower($type)) {
+            case 'article':
+                $find = ['name', 'datePublished', 'dateModified', 'articleSection', 'articleBody', 'url', 'headline', 'dateModified', 'datePublished', 'dateCreated', 'keywords', 'thumbnailUrl', 'image', 'headline', 'author'];
+                foreach ($json as $j => $val) {
+                    if (in_array($j, $find)) {
+                        $res[$j] = $val;
+                    }
+                }
+                break;
+
+            default:
+                dd("ce type de shema n'est pas reconnu");
+                break;
+        }
+        return  '<script type="application/ld+json">' . "\n" . json_encode($res, JSON_UNESCAPED_SLASHES) . '</script>';
+    }
+    function keywords($string, $number = 10)
+    {
+        return StringHelper::keywords($string, $number);
     }
 }
