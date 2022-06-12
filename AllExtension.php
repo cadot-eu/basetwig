@@ -685,6 +685,6 @@ class AllExtension extends AbstractExtension
     }
     function keywords($string, $number = 10)
     {
-        return StringHelper::keywords($string, $number);
+        return implode(',', StringHelper::keywords($string, $number));
     }
 }
