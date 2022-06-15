@@ -234,7 +234,7 @@ class AllExtension extends AbstractExtension
      * 
      * @return The HTML of the page with the span tags removed.
      */
-    public function lang($html, $lang = ''): string
+    public function lang($html, $lang = ''): ?string
     {
         if (!$html) return null;
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
