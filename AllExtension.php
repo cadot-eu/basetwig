@@ -12,9 +12,11 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Service\base\StringHelper;
+use DOMElement;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use DOMNode;
 
 class AllExtension extends AbstractExtension
 {
@@ -86,6 +88,12 @@ class AllExtension extends AbstractExtension
             ]),
             new TwigFunction('TBkeywords', [
                 $this, 'keywords', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
+            new TwigFunction('TBglossaire', [
+                $this, 'glossaire', [
                     'is_safe' => ['html'],
 
                 ],
@@ -686,5 +694,38 @@ class AllExtension extends AbstractExtension
     function keywords($string, $number = 10)
     {
         return implode(',', StringHelper::keywords($string, $number));
+    }
+    function glossaire($html, $glossaire)
+    {
+        $crawler = new Crawler($html);
+        $domDocument = $crawler->getNode(0)->parentNode;
+        foreach ($crawler->filter('body *') as $domElement) {
+            if (isset($domElement->nodeValue)) {
+                $texte = $domElement->nodeValue;
+                foreach ($glossaire as $mot) {
+                    $fmot = trim($mot->getTerme());
+                    // $texte = str_replace([strtolower($mot->getTerme()), $mot->getTerme(), ucfirst(strtolower($mot->getTerme())), strtoupper($mot->getTerme())], '¤¤', $texte);
+                    $start = 0;
+                    while (($pos = strpos($texte, $fmot, $start)) !== false) {
+                        $div = $domDocument->createElement('span');
+                        $div->setAttribute('class', 'status');
+                        $div->innerHTML = 'toto';
+                        $node = $domElement->cloneNode(1)->nodeType = 'span';
+                        $domElement->appendChild($node);
+                        $start = $pos + 1;
+                    }
+                }
+            }
+        }
+        return $crawler->html();
+    }
+    private static function __appendHTML($parent, $rawHtml)
+    {
+        $tmpDoc = new DOMDocument();
+        $tmpDoc->loadHTML($rawHtml);
+        foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes as $node) {
+            $importedNode = $parent->ownerDocument->importNode($node, TRUE);
+            $parent->appendChild($importedNode);
+        }
     }
 }
