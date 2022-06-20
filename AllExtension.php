@@ -98,6 +98,14 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+            new TwigFunction('TBcktags', [
+                $this, 'cktags', [
+                    'is_safe' => [
+                        'html',
+                    ],
+
+                ],
+            ]),
 
 
 
@@ -127,6 +135,7 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+
 
         ];
     }
@@ -704,16 +713,6 @@ class AllExtension extends AbstractExtension
                 $texte = $domElement->nodeValue;
                 foreach ($glossaire as $mot) {
                     $fmot = trim($mot->getTerme());
-                    // $texte = str_replace([strtolower($mot->getTerme()), $mot->getTerme(), ucfirst(strtolower($mot->getTerme())), strtoupper($mot->getTerme())], '¤¤', $texte);
-                    $start = 0;
-                    while (($pos = strpos($texte, $fmot, $start)) !== false) {
-                        $div = $domDocument->createElement('span');
-                        $div->setAttribute('class', 'status');
-                        $div->innerHTML = 'toto';
-                        $node = $domElement->cloneNode(1)->nodeType = 'span';
-                        $domElement->appendChild($node);
-                        $start = $pos + 1;
-                    }
                 }
             }
         }
@@ -727,5 +726,13 @@ class AllExtension extends AbstractExtension
             $importedNode = $parent->ownerDocument->importNode($node, TRUE);
             $parent->appendChild($importedNode);
         }
+    }
+    function cktags($string, $tag)
+    {
+        $tab = [];
+        $crawler = new Crawler($string);
+        foreach ($crawler->filter($tag) as $item)
+            $tab[] = $item->nodeValue;
+        return ($tab);
     }
 }
