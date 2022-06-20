@@ -80,6 +80,12 @@ class AllExtension extends AbstractExtension
 
                 ],
             ]),
+            new TwigFunction('TBcktexte', [
+                $this, 'cktexte', [
+                    'is_safe' => ['html'],
+
+                ],
+            ]),
             new TwigFunction('TBshema', [
                 $this, 'shema', [
                     'is_safe' => ['html'],
@@ -448,7 +454,7 @@ class AllExtension extends AbstractExtension
      * @return The first 500 characters of the string, or the first 500 characters before the first <div
      * class="page-break"> tag.
      */
-    public function ckintro($string, $limit = 500, $break = " ", $pad = "...")
+    static  function ckintro($string, $limit = 500, $break = " ", $pad = "...")
     {
         if (strpos($string, '<div class="page-break"') !== false) {
             return html_entity_decode(explode('<div class="page-break"', $string)[0]);
@@ -466,7 +472,25 @@ class AllExtension extends AbstractExtension
             return html_entity_decode(strip_tags($string) . $pad);
         }
     }
+    /**
+     * If the string is longer than the limit, break it at the last space before the limit and add the pad
+     *
+     * @param string The string to be trimmed.
+     * @param limit The maximum number of characters to return.
+     * @param break The character you want to break the string at.
+     * @param pad The string to append to the end of the truncated string.
+     *
+     * @return The first 500 characters of the string, or the first 500 characters before the first <div
+     * class="page-break"> tag.
+     */
+    static function cktexte($string)
+    {
+        if (strpos($string, '<div class="page-break"') !== false) {
+            return html_entity_decode(explode('<div class="page-break"', $string)[1]);
+        }
 
+        return $string;
+    }
     static function ckclean($string)
     {
         return preg_replace("/<\\/?p(\\s+.*?>|>)/", "", $string);;
