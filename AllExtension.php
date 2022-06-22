@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use DOMNode;
 
+use function PHPUnit\Framework\isEmpty;
+
 class AllExtension extends AbstractExtension
 {
     private $requestStack;
@@ -262,10 +264,12 @@ class AllExtension extends AbstractExtension
         if (!$html) return null;
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
         $crawler = new Crawler($html);
-        foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
-            $node->parentNode->removeChild($node);
+        $dom = new DOMDocument();
+        $res = new Crawler();
+        foreach ($crawler->filter('span[lang=' . $locale . ']') as $node) {
+            $res->addNode($node);
         };
-        return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
+        return ($res->count()) ? $res->html() : $html;
     }
 
     //convertie une date anglaise en fr
