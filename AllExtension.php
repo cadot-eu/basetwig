@@ -440,8 +440,8 @@ class AllExtension extends AbstractExtension
 
     public function TBimgToBase64($url, $inline = false)
     {
-        $binary = file_get_contents($url);
-        return $inline ? sprintf('data:image/%s;base64,%s', pathinfo($url, PATHINFO_EXTENSION), base64_encode($binary)) : base64_encode($binary);
+
+        return $inline ? sprintf('data:image/%s;base64,%s', pathinfo($url, PATHINFO_EXTENSION), base64_encode($url)) : base64_encode($url);
     }
     /* -------------------------------------------------------------------------- */
     /*                            functions editeur ckeditor                      */
