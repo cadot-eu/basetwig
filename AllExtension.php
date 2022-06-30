@@ -270,13 +270,15 @@ class AllExtension extends AbstractExtension
         foreach ($crawler->filter('*') as $node) {
             if (trim(html_entity_decode($node->nodeValue), " \t\n\r\0\x0B\xC2\xA0") == '')
                 $node->parentNode->removeChild($node);
-            else dump($node->nodeValue);
+            // else dump($node->nodeValue);
         }
 
 
 
         return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
     }
+
+
 
 
     //convertie une date anglaise en fr
