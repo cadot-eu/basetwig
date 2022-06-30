@@ -264,13 +264,20 @@ class AllExtension extends AbstractExtension
         if (!$html) return null;
         $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
         $crawler = new Crawler($html);
-        $dom = new DOMDocument();
-        $res = new Crawler();
-        foreach ($crawler->filter('span[lang=' . $locale . ']') as $node) {
-            $res->addNode($node);
-        };
-        return ($res->count()) ? $res->html() : $html;
+        foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
+            $node->parentNode->removeChild($node);
+        }
+        foreach ($crawler->filter('*') as $node) {
+            if (trim(html_entity_decode($node->nodeValue), " \t\n\r\0\x0B\xC2\xA0") == '')
+                $node->parentNode->removeChild($node);
+            else dump($node->nodeValue);
+        }
+
+
+
+        return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
     }
+
 
     //convertie une date anglaise en fr
     //de la forme datetime
