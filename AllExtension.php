@@ -34,6 +34,7 @@ class AllExtension extends AbstractExtension
 
             /* --------------------- implementation de functions php -------------------- */
             new TwigFunction('TBdd', [$this, 'dd']),
+            new TwigFunction('TBdd', [$this, 'd']),
             new TwigFunction('TBgetenv', [$this, 'getenv']),
             /* -------------------------- functions d'affichage ------------------------- */
             new TwigFunction('TBdatefr', [$this, 'datefr']),
@@ -161,7 +162,10 @@ class AllExtension extends AbstractExtension
     {
         dd($value);
     }
-
+    public function d($value)
+    {
+        dump($value);
+    }
     public function getenv(string $var)
     {
         return $_ENV[$var];
