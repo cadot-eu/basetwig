@@ -127,7 +127,6 @@ class AllExtension extends AbstractExtension
             new TwigFilter('TBsanitize', [$this, 'sanitize']),
             new TwigFilter('TBobjetProperties', [$this, 'objetProperties']),
             new TwigFilter('TBtxtfromhtml', [$this, 'txtfromhtml']),
-            new TwigFilter('TBlang', [$this, 'lang']),
             new TwigFilter('TBjsonpretty', [
                 $this, 'jsonpretty', [
                     'is_safe' => ['html'],
@@ -254,37 +253,6 @@ class AllExtension extends AbstractExtension
 
         return implode('<br>', $tr);
     }
-    /**
-     * It takes a string of HTML, finds all the `<span>` tags with a `lang` attribute, and removes them
-     * if the `lang` attribute doesn't match the current locale
-     * 
-     * @param html the html to be filtered
-     * @param lang The name of the filter.
-     * 
-     * @return The HTML of the page with the span tags removed.
-     */
-    public function lang($html, $lang = ''): ?string
-    {
-        if (!$html) return null;
-        $locale = $lang ?: $this->requestStack->getCurrentRequest()->getLocale();
-        $crawler = new Crawler($html);
-        foreach ($crawler->filter('span[lang!=' . $locale . ']') as $node) {
-            $node->parentNode->removeChild($node);
-        }
-        foreach ($crawler->filter('*') as $node) {
-            if (trim(html_entity_decode($node->nodeValue), " \t\n\r\0\x0B\xC2\xA0") == '')
-                $node->parentNode->removeChild($node);
-            // else dump($node->nodeValue);
-        }
-
-
-
-        return  HtmlHelper::remove_html_tags($crawler->outerHtml(), ['body', 'html']);
-    }
-
-
-
-
     //convertie une date anglaise en fr
     //de la forme datetime
     public function datefr($date, $format)
