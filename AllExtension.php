@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use DOMNode;
 
 use function PHPUnit\Framework\isEmpty;
+use App\Service\base\FileUploader;
 
 class AllExtension extends AbstractExtension
 {
@@ -179,12 +180,7 @@ class AllExtension extends AbstractExtension
     public function TBgetFilename(string $file): string //example /app/public/uploads/fichier/toto-test-1232.doc.jpg
     {
         $info = pathinfo($file);
-        if (strpos($info['filename'], '-')) {
-            $filename = substr($info['filename'], 0, strrpos($info['filename'], '-'));
-        } else {
-            $filename = $info['filename'];
-        }
-        return $filename . '.' . $info['extension'];
+        return FileUploader::cleanname($info['filename'] . '.' . $info['extension']);
     }
 
     /**
