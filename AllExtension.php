@@ -37,6 +37,7 @@ class AllExtension extends AbstractExtension
             new TwigFunction('TBdd', [$this, 'dd']),
             new TwigFunction('TBd', [$this, 'd']),
             new TwigFunction('TBgetenv', [$this, 'getenv']),
+            new TwigFunction('TBgetClass', [$this, 'getClass']),
             /* -------------------------- functions d'affichage ------------------------- */
             new TwigFunction('TBdatefr', [$this, 'datefr']),
             new TwigFunction('TBuploadmax', [
@@ -739,5 +740,17 @@ class AllExtension extends AbstractExtension
         foreach ($crawler->filter($tag) as $item)
             $tab[] = $item->nodeValue;
         return ($tab);
+    }
+
+    /**
+     * It returns the class name of an object
+     * 
+     * @param object The object to get the class name from.
+     * 
+     * @return The short name of the class of the object.
+     */
+    public function getClass($object)
+    {
+        return (new \ReflectionClass($object))->getShortName();
     }
 }
