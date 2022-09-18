@@ -180,6 +180,7 @@ class AllExtension extends AbstractExtension
      */
     public function TBgetFilename(string $file): string //example /app/public/uploads/fichier/toto-test-1232.doc.jpg
     {
+        return $file;
         $info = pathinfo($file);
         return FileUploader::cleanname($info['filename'] . '.' . $info['extension']);
     }
