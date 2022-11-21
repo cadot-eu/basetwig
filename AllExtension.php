@@ -2,6 +2,7 @@
 
 namespace App\Twig\base;
 
+use App\Service\base\ArticleHelper;
 use App\Service\base\HtmlHelper;
 use App\Service\base\ToolsHelper;
 use DOMDocument;
@@ -136,6 +137,10 @@ class AllExtension extends AbstractExtension
                 ],
 
             ]),
+            /* -------------------------------- filter -------------------------------- */
+            new TwigFilter('TBArticleSommaire', [$this, 'articlesommaire']),
+            new TwigFilter('TBArticleVideo', [$this, 'articlevideo']),
+            new TwigFilter('TBArticleAll', [$this, 'articleall']),
             /* -------------------------------- ckeditor -------------------------------- */
             new TwigFilter('TBckclean', [
                 $this, 'ckclean', [
@@ -230,6 +235,18 @@ class AllExtension extends AbstractExtension
     public function txtfromhtml($str)
     {
         return strip_tags(html_entity_decode($str, ENT_QUOTES));
+    }
+    public function articlesommaire($str)
+    {
+        return ArticleHelper::addSommaire($str);
+    }
+    public function articlevideo($str)
+    {
+        return ArticleHelper::addLinkVideos($str);
+    }
+    public function articleall($str)
+    {
+        return ArticleHelper::addSommaire(ArticleHelper::addLinkVideos($str));
     }
 
     /**
