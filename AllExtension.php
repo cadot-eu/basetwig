@@ -39,6 +39,8 @@ class AllExtension extends AbstractExtension
             new TwigFunction('TBd', [$this, 'd']),
             new TwigFunction('TBgetenv', [$this, 'getenv']),
             new TwigFunction('TBgetClass', [$this, 'getClass']),
+            new TwigFunction('TBregex', [$this, 'regex']),
+            new TwigFunction('TBpregReplace', [$this, 'pregReplace']),
             /* -------------------------- functions d'affichage ------------------------- */
             new TwigFunction('TBdatefr', [$this, 'datefr']),
             new TwigFunction('TBuploadmax', [
@@ -757,6 +759,16 @@ class AllExtension extends AbstractExtension
         foreach ($crawler->filter($tag) as $item)
             $tab[] = $item->nodeValue;
         return ($tab);
+    }
+
+    public function regex($string, $regex)
+    {
+        preg_match_all($regex, $string, $matches);
+        return $matches;
+    }
+    public function pregReplace($regex, $replace, $string)
+    {
+        return preg_replace($regex, $replace, $string);
     }
 
     /**
