@@ -484,7 +484,7 @@ class AllExtension extends AbstractExtension
      * @return The first 500 characters of the string, or the first 500 characters before the first <div
      * class="page-break"> tag.
      */
-    static function cktexte($string)
+    static public function cktexte($string)
     {
         if (strpos($string, '<div class="page-break"') !== false) {
             return html_entity_decode(explode('<div class="page-break"', $string)[1]);
@@ -492,7 +492,7 @@ class AllExtension extends AbstractExtension
 
         return $string;
     }
-    static function ckclean($string)
+    static public function ckclean($string)
     {
         return preg_replace("/<\\/?p(\\s+.*?>|>)/", "", html_entity_decode($string));;
     }
@@ -743,7 +743,7 @@ class AllExtension extends AbstractExtension
         }
         return $crawler->html();
     }
-    private static function __appendHTML($parent, $rawHtml)
+    private function __appendHTML($parent, $rawHtml)
     {
         $tmpDoc = new DOMDocument();
         $tmpDoc->loadHTML($rawHtml);
