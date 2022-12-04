@@ -662,7 +662,7 @@ class AllExtension extends AbstractExtension
         }
     }
 
-    function innerHTML(\DOMNode $n, $include_target_tag = true)
+    public function innerHTML(\DOMNode $n, $include_target_tag = true)
     {
         $doc = new \DOMDocument();
         $doc->appendChild($doc->importNode($n, true));
@@ -672,7 +672,7 @@ class AllExtension extends AbstractExtension
         }
         return preg_replace('@^<' . $n->nodeName . '[^>]*>|</' . $n->nodeName . '>$@', '', $html);
     }
-    function changeTagName($node, $name)
+    public function changeTagName($node, $name)
     {
         $childnodes = array();
         foreach ($node->childNodes as $child) {
@@ -705,7 +705,7 @@ class AllExtension extends AbstractExtension
      * @return the value of the variable .
      */
 
-    function shema($type, $json)
+    public function shema($type, $json)
     {
         $res['@context'] = "http://schema.org";
         $res['@type'] = ucfirst($json['@type']);
@@ -725,11 +725,11 @@ class AllExtension extends AbstractExtension
         }
         return  '<script type="application/ld+json">' . "\n" . json_encode($res, JSON_UNESCAPED_SLASHES) . '</script>';
     }
-    function keywords($string, $number = 10)
+    public function keywords($string, $number = 10)
     {
         return implode(',', StringHelper::keywords($string, $number));
     }
-    function glossaire($html, $glossaire)
+    public function glossaire($html, $glossaire)
     {
         $crawler = new Crawler($html);
         $domDocument = $crawler->getNode(0)->parentNode;
@@ -752,7 +752,7 @@ class AllExtension extends AbstractExtension
             $parent->appendChild($importedNode);
         }
     }
-    function cktags($string, $tag)
+    public function cktags($string, $tag)
     {
         $tab = [];
         $crawler = new Crawler($string);
