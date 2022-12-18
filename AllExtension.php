@@ -600,12 +600,11 @@ class AllExtension extends AbstractExtension
 	 * @return The first 500 characters of the string, or the first 500 characters before the first <div
 	 * class="page-break"> tag.
 	 */
-	static function ckintro(
-		$string,
-		$limit = 500,
-		$break = ' ',
-		$pad = '...'
-	): string {
+	static function ckintro($string = '', $limit = 500, $break = ' ', $pad = '...'): string
+	{
+		if ($string == '' || $string == null) {
+			return '';
+		}
 		if (strpos($string, '<div class="page-break"') !== false) {
 			return html_entity_decode(
 				explode('<div class="page-break"', $string)[0]
