@@ -178,7 +178,9 @@ class AllExtension extends AbstractExtension
 	}
 	public function getenv(string $var)
 	{
-		return $_ENV[$var];
+		if (isset($_ENV[$var]))
+			return $_ENV[$var];
+		else return '';
 	}
 	/* -------------------------------------------------------------------------- */
 	/*                            functions d'affichage                           */
