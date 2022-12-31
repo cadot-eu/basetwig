@@ -247,7 +247,7 @@ class AllExtension extends AbstractExtension
 	}
 	public function articlesommaire($str)
 	{
-		return ArticleHelper::addSommaire($str);
+		return ArticleHelper::getSommaire($str);
 	}
 	public function articlevideo($str)
 	{
@@ -255,7 +255,7 @@ class AllExtension extends AbstractExtension
 	}
 	public function articleall($str)
 	{
-		return ArticleHelper::addSommaire(ArticleHelper::addLinkVideos($str));
+		return ArticleHelper::getSommaire(ArticleHelper::addLinkVideos($str));
 	}
 
 	/**
