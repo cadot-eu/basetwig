@@ -243,7 +243,7 @@ class AllExtension extends AbstractExtension
 
 	public function txtfromhtml($str)
 	{
-		return strip_tags(html_entity_decode($str, ENT_QUOTES));
+		return str_replace('"', " ", strip_tags(html_entity_decode($str, ENT_QUOTES)));
 	}
 	public function articlesommaire($str)
 	{
