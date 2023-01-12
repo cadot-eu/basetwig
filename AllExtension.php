@@ -609,11 +609,11 @@ class AllExtension extends AbstractExtension
 		}
 		if (strpos($string, '<div class="page-break"') !== false) {
 			return html_entity_decode(
-				explode('<div class="page-break"', $string)[0]
+				strip_tags(explode('<div class="page-break"', $string)[0])
 			);
 		} elseif (strpos($string, '__se__format__replace_page_break') !== false) {
 			return html_entity_decode(
-				explode('<div class="__se__format__replace_page_break">​', $string)[0] . '</div></div>'
+				strip_tags(explode('__se__format__replace_page_break', $string)[0])
 			);
 		} else {
 			// return with no change if string is shorter than $limit
@@ -626,7 +626,7 @@ class AllExtension extends AbstractExtension
 				$string = substr($string, 0, $breakpoint);
 			}
 
-			return html_entity_decode(strip_tags($string) . $pad);
+			return strip_tags(html_entity_decode(strip_tags($string) . $pad));
 		}
 	}
 	/**
