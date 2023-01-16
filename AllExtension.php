@@ -607,14 +607,22 @@ class AllExtension extends AbstractExtension
 		if ($string == '' || $string == null) {
 			return '';
 		}
+		//si on a la présence de la balise page-break
 		if (strpos($string, '<div class="page-break"') !== false) {
 			return html_entity_decode(
 				strip_tags(explode('<div class="page-break"', $string)[0])
 			);
-		} elseif (strpos($string, '__se__format__replace_page_break') !== false) {
+		}
+		//si on a la présence de la balise __se__format__replace_page_break
+		elseif (strpos($string, '__se__format__replace_page_break') !== false) {
 			return html_entity_decode(
 				strip_tags(explode('__se__format__replace_page_break', $string)[0])
 			);
+		}
+		//si on est dans un template on retourne le premier blockquote
+		elseif (strpos($string, 'øtitreø') !== false) {
+			$crawler = new Crawler($string);
+			return $crawler->filter('blockquote')->getNode(0)->textContent;
 		} else {
 			// return with no change if string is shorter than $limit
 			if (strlen($string) <= $limit) {
