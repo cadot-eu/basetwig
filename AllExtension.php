@@ -21,6 +21,7 @@ use DOMNode;
 
 use function PHPUnit\Framework\isEmpty;
 use App\Service\base\FileUploader;
+use Symfony\Component\HttpFoundation\File\File;
 
 class AllExtension extends AbstractExtension
 {
@@ -180,7 +181,9 @@ class AllExtension extends AbstractExtension
 	{
 		if (isset($_ENV[$var]))
 			return $_ENV[$var];
-		else return '';
+		else {
+			\file_put_contents('/app/.env', file_get_contents('/app/.env') . "\n$var=");
+		}
 	}
 	/* -------------------------------------------------------------------------- */
 	/*                            functions d'affichage                           */
