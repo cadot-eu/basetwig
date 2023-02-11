@@ -22,6 +22,7 @@ use DOMNode;
 use function PHPUnit\Framework\isEmpty;
 use App\Service\base\FileUploader;
 use Symfony\Component\HttpFoundation\File\File;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 
 class AllExtension extends AbstractExtension
 {
@@ -60,6 +61,14 @@ class AllExtension extends AbstractExtension
 				],
 			]),
 			/* ----------------------------- other-fonctions ----------------------------- */
+			new TwigFunction('TBbot', [
+				$this,
+				'bot',
+				[
+					'is_safe' => ['html'],
+				],
+			]),
+
 			new TwigFunction('TBjsondecode', [
 				$this,
 				'jsondecode',
@@ -1005,5 +1014,13 @@ class AllExtension extends AbstractExtension
 	public function getClass($object)
 	{
 		return (new \ReflectionClass($object))->getShortName();
+	}
+
+	public function bot($userAgent)
+	{
+		$CrawlerDetect = new CrawlerDetect;
+		if ($CrawlerDetect->isCrawler($userAgent)) {
+			return $CrawlerDetect->getMatches();
+		}
 	}
 }
