@@ -666,15 +666,12 @@ class AllExtension extends AbstractExtension
      */
     public static function cktexte($string)
     {
-        if (
-            strpos($string, '<div class="__se__format__replace_page_break"') !== false
-        ) {
-            return html_entity_decode(
-                explode('<div class="__se__format__replace_page_break"', $string)[1]
-            );
-        }
+        $crawler = new Crawler($string);
 
-        return $string;
+        if ($crawler->filter('div.__se__format__replace_page_break')->count() > 0) {
+          //on renvoie les noeuds qui sont parès ce noeud
+            return $crawler->filter('div.__se__format__replace_page_break')->getNode(0)->nextSibling->textContent;
+        }
     }
     public static function ckclean($string)
     {
@@ -986,7 +983,7 @@ class AllExtension extends AbstractExtension
         $tmpDoc->loadHTML($rawHtml);
         foreach (
             $tmpDoc->getElementsByTagName('body')->item(0)->childNodes
- as $node
+            as $node
         ) {
             $importedNode = $parent->ownerDocument->importNode($node, true);
             $parent->appendChild($importedNode);
