@@ -666,9 +666,11 @@ class AllExtension extends AbstractExtension
      */
     public static function cktexte($string)
     {
-        if (strpos($string, '<div class="page-break"') !== false) {
+        if (
+            strpos($string, '<div class="__se__format__replace_page_break"') !== false
+        ) {
             return html_entity_decode(
-                explode('<div class="page-break"', $string)[1]
+                explode('<div class="__se__format__replace_page_break"', $string)[1]
             );
         }
 
@@ -984,7 +986,7 @@ class AllExtension extends AbstractExtension
         $tmpDoc->loadHTML($rawHtml);
         foreach (
             $tmpDoc->getElementsByTagName('body')->item(0)->childNodes
-        as $node
+ as $node
         ) {
             $importedNode = $parent->ownerDocument->importNode($node, true);
             $parent->appendChild($importedNode);
