@@ -190,12 +190,12 @@ class AllExtension extends AbstractExtension
     {
         dump($value);
     }
-    public function getenv(string $var)
+    public function getenv(string $var): ?string
     {
         if (isset($_ENV[$var])) {
             return $_ENV[$var];
         } else {
-            \file_put_contents('/app/.env', file_get_contents('/app/.env') . "\n$var=");
+            return null;
         }
     }
     /* -------------------------------------------------------------------------- */
