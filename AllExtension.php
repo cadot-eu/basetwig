@@ -170,6 +170,20 @@ class AllExtension extends AbstractExtension
                     'is_safe' => ['html'],
                 ],
             ]),
+            new TwigFilter('TBaddclass', [
+                $this,
+                'addclass',
+                [
+                    'is_safe' => ['html'],
+                ],
+            ]),
+            new TwigFilter('TBonlybalise', [
+                $this,
+                'onlybalise',
+                [
+                    'is_safe' => ['html'],
+                ],
+            ]),
         ];
     }
 
@@ -675,6 +689,23 @@ class AllExtension extends AbstractExtension
             '/<\\/?p(\\s+.*?>|>)/',
             '',
             html_entity_decode($string)
+        );
+    }
+public static function onlybalise($string,$balise)
+{
+   //on extrait la balise
+    $crawler = new Crawler($string);
+    if($crawler->filter($balise)->count()>0)
+    return $crawler->filter($balise)->html();
+    else return '';
+}
+    public static function addclass($string, $class)
+    {
+       //dans le string on cheche class="" et on ajoute $class
+        return preg_replace(
+            '/class="([^"]*)"/',
+            'class="$1 ' . $class . '"',
+            $string
         );
     }
 
