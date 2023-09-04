@@ -98,6 +98,8 @@ class AllExtension extends AbstractExtension
                     'is_safe' => ['html'],
                 ],
             ]),
+            new TwigFunction('array_position', [$this, 'findPositionInArray']),
+
             new TwigFunction('TBckintro', [
                 $this,
                 'ckintro',
@@ -151,6 +153,7 @@ class AllExtension extends AbstractExtension
             new TwigFilter('TBsanitize', [$this, 'sanitize']),
             new TwigFilter('TBobjetProperties', [$this, 'objetProperties']),
             new TwigFilter('TBtxtfromhtml', [$this, 'txtfromhtml']),
+            new TwigFilter('call_method', [$this, 'callMethod']),
             new TwigFilter('TBjsonpretty', [
                 $this,
                 'jsonpretty',
@@ -679,7 +682,7 @@ class AllExtension extends AbstractExtension
         $crawler = new Crawler($string);
 
         if ($crawler->filter('div.__se__format__replace_page_break')->count() > 0) {
-          //on renvoie les noeuds qui sont parès ce noeud
+            //on renvoie les noeuds qui sont parès ce noeud
             return $crawler->filter('div.__se__format__replace_page_break')->getNode(0)->nextSibling->textContent;
         }
     }
@@ -691,17 +694,17 @@ class AllExtension extends AbstractExtension
             html_entity_decode($string)
         );
     }
-public static function onlybalise($string,$balise)
-{
-   //on extrait la balise
-    $crawler = new Crawler($string);
-    if($crawler->filter($balise)->count()>0)
-    return $crawler->filter($balise)->html();
-    else return '';
-}
+    public static function onlybalise($string, $balise)
+    {
+        //on extrait la balise
+        $crawler = new Crawler($string);
+        if ($crawler->filter($balise)->count() > 0)
+            return $crawler->filter($balise)->html();
+        else return '';
+    }
     public static function addclass($string, $class)
     {
-       //dans le string on cheche class="" et on ajoute $class
+        //dans le string on cheche class="" et on ajoute $class
         return preg_replace(
             '/class="([^"]*)"/',
             'class="$1 ' . $class . '"',
@@ -1008,10 +1011,8 @@ public static function onlybalise($string,$balise)
     {
         $tmpDoc = new DOMDocument();
         $tmpDoc->loadHTML($rawHtml);
-        foreach (
-            $tmpDoc->getElementsByTagName('body')->item(0)->childNodes
-        as $node
-        ) {
+        foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes
+            as $node) {
             $importedNode = $parent->ownerDocument->importNode($node, true);
             $parent->appendChild($importedNode);
         }
@@ -1062,5 +1063,20 @@ public static function onlybalise($string,$balise)
     public function isObject($var)
     {
         return is_object($var);
+    }
+    public function callMethod($object, string $methodName)
+    {
+        if (method_exists($object, $methodName)) {
+            return $object->{$methodName}();
+        }
+
+        return null;
+    }
+    public function findPositionInArray(array $array, $searchElement)
+    {
+        $position = array_search($searchElement, $array);
+
+        // If element is not found, return false
+        return ($position !== false) ? $position + 1 : false;
     }
 }
