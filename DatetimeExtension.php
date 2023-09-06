@@ -4,6 +4,7 @@ namespace App\Twig\base;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Twig\TwigFilter;
 
 class DatetimeExtension extends AbstractExtension
 {
@@ -11,6 +12,12 @@ class DatetimeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('TBdatefr', [$this, 'datefr'])
+        ];
+    }
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('TBisDate', [$this, 'isdate'])
         ];
     }
 
@@ -71,5 +78,19 @@ class DatetimeExtension extends AbstractExtension
                 date($format, strtotime($date))
             )
         );
+    }
+    public function isdate($date)
+    {
+        if (is_a($date, 'DateTime')) {
+            return true;
+        }
+        //test si $date est une date
+        try {
+            $date = new \DateTime($date);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

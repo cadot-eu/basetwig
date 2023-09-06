@@ -13,8 +13,7 @@ class SymfonyExtension extends AbstractExtension
     {
         return [
             new TwigFilter('TBobjetProperties', [$this, 'objetProperties']),
-            new TwigFilter('TBclass', [$this, 'class']),
-            new TwigFilter('TBclassNom', [$this, 'classNom']),
+            new TwigFilter('TBclass', [$this, 'class'])
         ];
     }
     public function getFunctions(): array
@@ -43,9 +42,5 @@ class SymfonyExtension extends AbstractExtension
     public function class($objet)
     {
         return get_class($objet);
-    }
-    public function classNom($objet)
-    {
-        return strtolower(get_class($objet));
     }
 }
