@@ -11,20 +11,8 @@ class ServerExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('TBbot', [
-                $this,
-                'bot',
-                [
-                    'is_safe' => ['html'],
-                ],
-            ]),
-            new TwigFunction('TBuploadmax', [
-                $this,
-                'max',
-                [
-                    'is_safe' => ['html'],
-                ],
-            ]),
+            new TwigFunction('TBbot', [$this, 'bot', ['is_safe' => ['html'],],]),
+            new TwigFunction('TBuploadmax', [$this, 'max', ['is_safe' => ['html'],],]),
         ];
     }
     public function max()

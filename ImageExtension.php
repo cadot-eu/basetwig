@@ -10,13 +10,7 @@ class ImageExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('TBimgToBase64', [
-                $this,
-                'TBimgToBase64',
-                [
-                    'is_safe' => ['html'],
-                ],
-            ]),
+            new TwigFunction('TBimgToBase64', [$this, 'TBimgToBase64', ['is_safe' => ['html'],],]),
         ];
     }
     public function TBimgToBase64($url, $inline = false)
