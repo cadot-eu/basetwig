@@ -4,6 +4,8 @@ namespace App\Twig\base;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use ImagickPixel;
+use Imagick;
 
 class ImageExtension extends AbstractExtension
 {
@@ -11,17 +13,25 @@ class ImageExtension extends AbstractExtension
     {
         return [
             new TwigFunction('TBimgToBase64', [$this, 'TBimgToBase64', ['is_safe' => ['html'],],]),
+            new TwigFunction('TBIconFromBootstrap', [$this, 'IconFromBootstrap', ['is_safe' => ['html'],],]),
         ];
     }
-    public function TBimgToBase64($url, $inline = false)
+    public static function TBimgToBase64($urlOrFile, $inline = false)
     {
-        return $inline
-            ? sprintf(
-                'data:image/%s;base64,%s',
-                pathinfo($url, PATHINFO_EXTENSION),
-                base64_encode($url)
-            )
-            : base64_encode($url);
+        if (!filter_var($urlOrFile, FILTER_VALIDATE_URL)) {
+            if (file_exists('/app/public/' . $urlOrFile)) {
+                $url = '/app/public/' . $urlOrFile;
+                $content = file_get_contents($url);
+            } else
+                return false;
+        } else {
+            if (file_exists($urlOrFile)) {
+                $url = $urlOrFile;
+                $content = file_get_contents($urlOrFile);
+            } else
+                return false;
+        }
+        return $inline ? sprintf('data:image/%s;base64,%s', pathinfo($url, PATHINFO_EXTENSION), base64_encode($content)) : base64_encode($content);
     }
     public function getico($file, $taille = 32)
     {
@@ -111,5 +121,34 @@ class ImageExtension extends AbstractExtension
             }
         }
         return $ret;
+    }
+    public function IconFromBootstrap($name, $color = '#000', $size = 32)
+    {
+        // Définir le chemin du fichier SVG correspondant au nom donné
+        $svgPath = '/app/node_modules/bootstrap-icons/icons/' . $name . '.svg';
+
+        //on modifie le fill
+        try {
+            // Lire le contenu du fichier SVG
+            $svgContent = file_get_contents($svgPath);
+
+            // Remplacer la couleur de remplissage actuelle par la couleur souhaitée
+            $svgContent = str_replace('fill="currentColor"', 'fill="' . $color . '"', $svgContent);
+            $svgContent = preg_replace('/width="[^"]+"/', 'width="1024"', $svgContent);
+            $svgContent = preg_replace('/height="[^"]+"/', 'height="1024"', $svgContent);
+
+
+            // Créer un objet Imagick à partir du fichier SVG
+            $im = new Imagick();
+            $im->setBackgroundColor(new ImagickPixel('transparent'));
+            $im->readImageBlob($svgContent);
+            $im->setImageFormat("png32");
+            $pngBase64 = 'data:image/png;base64,' . base64_encode($im->getImageBlob());
+            // Retourner le PNG encodé en base64
+            return '<img src="' . $pngBase64 . '" width="' . $size . '" height="' . $size . '">';
+        } catch (Exception $e) {
+            // En cas d'erreur, vous pouvez choisir de renvoyer un message d'erreur ou une valeur par défaut
+            return "Erreur : " . $e->getMessage();
+        }
     }
 }
