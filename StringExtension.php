@@ -6,6 +6,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use App\Service\base\StringHelper;
 use Symfony\Component\DomCrawler\Crawler;
+use Twig\TwigFilter;
 
 class StringExtension extends AbstractExtension
 {
@@ -16,6 +17,29 @@ class StringExtension extends AbstractExtension
             new TwigFunction('TBglossaire', [$this, 'glossaire', ['is_safe' => ['html'],],]),
         ];
     }
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('TBtoString', [$this, 'tostring', ['is_safe' => ['html'],],]),
+        ];
+    }
+
+    public function tostring($object)
+    {
+        switch (gettype($object)) {
+            case 'string':
+                return $object;
+            case 'object':
+                switch ($variable = get_class($object)) {
+                    case 'DateTime':
+                        return $object->format('d/m/Y');
+                }
+                return $object->toString();
+            default:
+                return $object;
+        }
+    }
+
 
     public function keywords($string, $number = 10)
     {
