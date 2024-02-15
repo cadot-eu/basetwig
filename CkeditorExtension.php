@@ -75,9 +75,12 @@ class CkeditorExtension extends AbstractExtension
                 return $string;
             }
 
-            $string = substr($string, 0, $limit);
-            if (false !== ($breakpoint = strrpos($string, $break))) {
-                $string = substr($string, 0, $breakpoint);
+            if (!is_array($break)) {
+                $string = substr($string, 0, $limit);
+                if (false !== ($breakpoint = strrpos($string, $break))) {
+                    $string = substr($string, 0, $breakpoint);
+                }
+                $string = StringExtension::intro($string);
             }
 
             return strip_tags(html_entity_decode(strip_tags($string) . $pad));

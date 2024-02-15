@@ -15,6 +15,7 @@ class StringExtension extends AbstractExtension
         return [
             new TwigFunction('TBkeywords', [$this, 'keywords', ['is_safe' => ['html'],],]),
             new TwigFunction('TBglossaire', [$this, 'glossaire', ['is_safe' => ['html'],],]),
+            new TwigFunction('TBIntro', [$this, 'intro', ['is_safe' => ['html']]])
         ];
     }
     public function getFilters(): array
@@ -23,7 +24,26 @@ class StringExtension extends AbstractExtension
             new TwigFilter('TBtoString', [$this, 'tostring', ['is_safe' => ['html'],],]),
         ];
     }
+    /**
+     * Trims a string by cutting it at the first punctuation mark that ends the sentence (such as . ? !)
+     *
+     * @param string $string The string to be trimmed.
+     * @return string The trimmed string.
+     */
+    static function intro($texte): string
+    {
+        $string = strip_tags($texte);
+        $punctuation = ['.', '?', '!'];
+        $trimmedString = '';
+        for ($i = 0; $i < strlen($string); $i++) {
+            if (in_array($string[$i], $punctuation)) {
+                $trimmedString = substr($string, 0, $i + 1);
+                break;
+            }
+        }
 
+        return $trimmedString;
+    }
     public function tostring($object)
     {
         switch (gettype($object)) {
