@@ -1,30 +1,28 @@
 <?php
+namespace CadotEu\Crud\Twig\Extension;
 
-namespace App\Twig\base;
-
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-use Faker\Factory;
-use Twig\TwigFilter;
 use Symfony\Component\DomCrawler\Crawler;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class OldExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new TwigFilter('TBaddclass', [$this, 'addclass', ['is_safe' => ['html']],]),
-            new TwigFilter('TBonlybalise', [$this, 'onlybalise', ['is_safe' => ['html']],])
+            new TwigFilter('TBaddclass', [$this, 'addclass', ['is_safe' => ['html']]]),
+            new TwigFilter('TBonlybalise', [$this, 'onlybalise', ['is_safe' => ['html']]]),
         ];
     }
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('TBImage', [$this, 'img', ['is_safe' => ['html']],]),
-            new TwigFunction('TBjsrender', [$this, 'ejsrender', ['is_safe' => ['html']],]),
-            new TwigFunction('TBjsfirstImage', [$this, 'ejsfirstImage', ['is_safe' => ['html']],]),
-            new TwigFunction('TBjsfirstHeader', [$this, 'ejsfirstHeader', ['is_safe' => ['html']],]),
-            new TwigFunction('TBjsfirstText', [$this, 'ejsfirstText', ['is_safe' => ['html']],])
+            new TwigFunction('TBImage', [$this, 'img', ['is_safe' => ['html']]]),
+            new TwigFunction('TBjsrender', [$this, 'ejsrender', ['is_safe' => ['html']]]),
+            new TwigFunction('TBjsfirstImage', [$this, 'ejsfirstImage', ['is_safe' => ['html']]]),
+            new TwigFunction('TBjsfirstHeader', [$this, 'ejsfirstHeader', ['is_safe' => ['html']]]),
+            new TwigFunction('TBjsfirstText', [$this, 'ejsfirstText', ['is_safe' => ['html']]]),
         ];
     }
     public function ejsrender($json, $quality = 'fullhd')
@@ -137,9 +135,12 @@ class OldExtension extends AbstractExtension
     {
         //on extrait la balise
         $crawler = new Crawler($string);
-        if ($crawler->filter($balise)->count() > 0)
+        if ($crawler->filter($balise)->count() > 0) {
             return $crawler->filter($balise)->html();
-        else return '';
+        } else {
+            return '';
+        }
+
     }
     public static function addclass($string, $class)
     {
@@ -167,57 +168,57 @@ class OldExtension extends AbstractExtension
         if (substr($size, -1) == '%') {
             $taille = $size;
         }
-        $tab = explode('/', $image);
-        $alt = str_replace('_', ' ', explode('.', end($tab))[0]);
-        $alt = str_replace('-', "'", $alt);
-        $return =
-            '
+        $tab     = explode('/', $image);
+        $alt     = str_replace('_', ' ', explode('.', end($tab))[0]);
+        $alt     = str_replace('-', "'", $alt);
+        $return  =
+        '
              <img src="' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'lazy'
-            ) .
-            '" 
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'lazy'
+        ) .
+        '"
              data-srcset="
                ' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'mini'
-            ) .
-            ' 100w,
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'mini'
+        ) .
+        ' 100w,
               ' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'petit'
-            ) .
-            ' 300w,
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'petit'
+        ) .
+        ' 300w,
                ' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'semi'
-            ) .
-            ' 450w,
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'semi'
+        ) .
+        ' 450w,
              ' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'moyen'
-            ) .
-            ' 600w,
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'moyen'
+        ) .
+        ' 600w,
              ' .
-            $this->CacheManager->getBrowserPath(
-                $this->Package->getUrl($image),
-                'grand'
-            ) .
-            ' 900w"
+        $this->CacheManager->getBrowserPath(
+            $this->Package->getUrl($image),
+            'grand'
+        ) .
+        ' 900w"
              class="lazyload ' .
-            $class .
-            '" data-sizes="auto"
+        $class .
+        '" data-sizes="auto"
             style="width:' .
-            $taille .
-            ';' .
-            $style .
-            '" alt="' .
-            ucfirst($alt) .
+        $taille .
+        ';' .
+        $style .
+        '" alt="' .
+        ucfirst($alt) .
             '"';
         $return .=
             'data-toggle="tooltip" data-placement="top" title="' . $tooltip . '"';

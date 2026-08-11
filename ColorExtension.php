@@ -1,10 +1,8 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Faker\Factory;
 
 class ColorExtension extends AbstractExtension
 {
@@ -16,16 +14,16 @@ class ColorExtension extends AbstractExtension
                 'inttocolor',
                 [
                     'is_safe' => ['html'],
-                ]
+                ],
 
-            ])
+            ]),
         ];
     }
     public static function inttocolor($int)
     {
-        $red = ($int * 997) % 256;
+        $red   = ($int * 997) % 256;
         $green = ($int * 911) % 256;
-        $blue = ($int * 751) % 256;
+        $blue  = ($int * 751) % 256;
 
         $hex = sprintf("#%02x%02x%02x", $red, $green, $blue);
         return $hex;

@@ -1,10 +1,8 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Faker\Factory;
 
 class SeoExtension extends AbstractExtension
 {
@@ -16,15 +14,15 @@ class SeoExtension extends AbstractExtension
                 'shema',
                 [
                     'is_safe' => ['html'],
-                ]
+                ],
 
-            ])
+            ]),
         ];
     }
     public function shema($type, $json)
     {
         $res['@context'] = 'http://schema.org';
-        $res['@type'] = ucfirst($json['@type']);
+        $res['@type']    = ucfirst($json['@type']);
         switch (strtolower($type)) {
             case 'article':
                 $find = [
@@ -56,8 +54,8 @@ class SeoExtension extends AbstractExtension
                 break;
         }
         return '<script type="application/ld+json">' .
-            "\n" .
-            json_encode($res, JSON_UNESCAPED_SLASHES) .
+        "\n" .
+        json_encode($res, JSON_UNESCAPED_SLASHES) .
             '</script>';
     }
 }

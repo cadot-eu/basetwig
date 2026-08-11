@@ -1,12 +1,9 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-use App\Service\base\StringHelper;
-use Symfony\Component\DomCrawler\Crawler;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class HtmlExtension extends AbstractExtension
 {
@@ -17,7 +14,6 @@ class HtmlExtension extends AbstractExtension
         ];
     }
     public function getFunctions(): array
-
     {
         return [
             new TwigFunction('TBchangeTagName', [$this, 'changeTagName', ['is_safe' => ['html']]]),
@@ -41,7 +37,7 @@ class HtmlExtension extends AbstractExtension
         }
         if ($node->hasAttributes()) {
             foreach ($node->attributes as $attr) {
-                $attrName = $attr->nodeName;
+                $attrName  = $attr->nodeName;
                 $attrValue = $attr->nodeValue;
                 $newnode->setAttribute($attrName, $attrValue);
             }

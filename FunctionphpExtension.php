@@ -1,19 +1,25 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class FunctionphpExtension extends AbstractExtension
 {
+
+    /**
+     * Liste des filtres Twig disponibles :
+     * - TBisArray   : Vérifie si une variable est un tableau.
+     * - TBisObject  : Vérifie si une variable est un objet.
+     * - TBsanitize  : Nettoie une valeur (sanitization).
+     */
     public function getFilters(): array
     {
         return [
             new TwigFilter('TBisArray', [$this, 'isArray']),
             new TwigFilter('TBisObject', [$this, 'isObject']),
-            new TwigFilter('TBsanitize', [$this, 'sanitize'])
+            new TwigFilter('TBsanitize', [$this, 'sanitize']),
         ];
     }
     public function getFunctions(): array

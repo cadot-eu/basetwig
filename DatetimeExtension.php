@@ -1,23 +1,22 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class DatetimeExtension extends AbstractExtension
 {
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('TBdatefr', [$this, 'datefr'])
+            new TwigFunction('TBdatefr', [$this, 'datefr']),
         ];
     }
     public function getFilters()
     {
         return [
-            new TwigFilter('TBisDate', [$this, 'isdate'])
+            new TwigFilter('TBisDate', [$this, 'isdate']),
         ];
     }
 

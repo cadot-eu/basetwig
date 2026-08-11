@@ -1,41 +1,38 @@
 <?php
+namespace CadotEu\Crud\Twig\Extension;
 
-namespace App\Twig\base;
-
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-use Faker\Factory;
 use Symfony\Component\DomCrawler\Crawler;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class CkeditorExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
         return [
-            new TwigFilter('TBckclean', [$this, 'ckclean', ['is_safe' => ['html'],],]),
+            new TwigFilter('TBckclean', [$this, 'ckclean', ['is_safe' => ['html']]]),
         ];
     }
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('TBckintro', [$this, 'ckintro', ['is_safe' => ['html'],],]),
-            new TwigFunction('TBcktexte', [$this, 'cktexte', ['is_safe' => ['html'],],]),
-            new TwigFunction('TBcktags', [$this, 'cktags', ['is_safe' => ['html'],],]),
+            new TwigFunction('TBckintro', [$this, 'ckintro', ['is_safe' => ['html']]]),
+            new TwigFunction('TBcktexte', [$this, 'cktexte', ['is_safe' => ['html']]]),
+            new TwigFunction('TBcktags', [$this, 'cktags', ['is_safe' => ['html']]]),
 
         ];
     }
 
     public function cktags($string, $tag)
     {
-        $tab = [];
+        $tab     = [];
         $crawler = new Crawler($string);
         foreach ($crawler->filter($tag) as $item) {
             $tab[] = $item->nodeValue;
         }
         return $tab;
     }
-
 
     /**
      * If the string is longer than the limit, break it at the last space before the limit and add the pad
@@ -48,7 +45,7 @@ class CkeditorExtension extends AbstractExtension
      * @return The first 500 characters of the string, or the first 500 characters before the first <div
      * class="page-break"> tag.
      */
-    static function ckintro($string = '', $limit = 500, $break = ' ', $pad = '...'): string
+    public static function ckintro($string = '', $limit = 500, $break = ' ', $pad = '...'): string
     {
         if ($string == '' || $string == null) {
             return '';
@@ -75,7 +72,7 @@ class CkeditorExtension extends AbstractExtension
                 return $string;
             }
 
-            if (!is_array($break)) {
+            if (! is_array($break)) {
                 $string = substr($string, 0, $limit);
                 if (false !== ($breakpoint = strrpos($string, $break))) {
                     $string = substr($string, 0, $breakpoint);

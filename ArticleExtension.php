@@ -1,11 +1,8 @@
 <?php
+namespace CadotEu\Crud\Twig\Extension;
 
-namespace App\Twig\base;
-
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-use Faker\Factory;
 use App\Service\base\ArticleHelper;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 class ArticleExtension extends AbstractExtension
@@ -16,7 +13,6 @@ class ArticleExtension extends AbstractExtension
             new TwigFilter('TBArticleSommaire', [$this, 'articlesommaire']),
             new TwigFilter('TBArticleVideo', [$this, 'articlevideo']),
             new TwigFilter('TBArticleAll', [$this, 'articleall']),
-
 
         ];
     }

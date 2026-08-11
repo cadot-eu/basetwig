@@ -1,10 +1,9 @@
 <?php
+namespace CadotEu\Crud\Twig\Extension;
 
-namespace App\Twig\base;
-
+use App\Service\base\FileUploader;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use App\Service\base\FileUploader;
 
 class FileExtension extends AbstractExtension
 {
@@ -30,7 +29,7 @@ class FileExtension extends AbstractExtension
                 $urlSansDomaine = '/' . $urlSansDomaine;
             }
 
-            // $urlSansDomaine contiendra l'URL sans le domaine
+                                    // $urlSansDomaine contiendra l'URL sans le domaine
             return $urlSansDomaine; // Affiche "/path/to/resource"
         } else {
             return false;

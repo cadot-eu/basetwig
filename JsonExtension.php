@@ -1,12 +1,9 @@
 <?php
-
-namespace App\Twig\base;
+namespace CadotEu\Crud\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
-use App\Service\base\StringHelper;
-use Symfony\Component\DomCrawler\Crawler;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class JsonExtension extends AbstractExtension
 {

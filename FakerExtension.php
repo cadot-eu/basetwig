@@ -1,10 +1,9 @@
 <?php
+namespace CadotEu\Crud\Twig\Extension;
 
-namespace App\Twig\base;
-
+use Faker\Factory;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Faker\Factory;
 
 class FakerExtension extends AbstractExtension
 {
